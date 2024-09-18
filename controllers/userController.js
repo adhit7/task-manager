@@ -58,14 +58,14 @@ const loginUser = asyncHandler(async (req, res) => {
 const googleLogin = asyncHandler(async (req, res) => {
   const authorizeUrl = oauth2Client.generateAuthUrl({
     scope: ['profile', 'email'], // We only request basic profile and email
-    redirect_uri: 'http://localhost:4000/user/google/callback',
+    redirect_uri:
+      'https://task-manager-pro.up.railway.app/user/google/callback',
   });
   res.redirect(authorizeUrl);
 });
 
 const googleCallback = asyncHandler(async (req, res) => {
   const code = req.query.code;
-
   try {
     const { tokens } = await oauth2Client.getToken(code);
 
@@ -88,7 +88,7 @@ const googleCallback = asyncHandler(async (req, res) => {
 
     if (user) {
       const token = generateToken(user);
-      res.redirect(`http://localhost:5173/login?token=${token}`);
+      res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`);
     }
   } catch (error) {
     console.error('Error during Google OAuth callback:', error);
