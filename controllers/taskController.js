@@ -6,7 +6,7 @@ import Task from '../models/Task.js';
 // @access  Private
 const createTask = asyncHandler(async (req, res) => {
   try {
-    const { title, description, status = 'TODO' } = req.body;
+    const { title, description, status } = req.body;
     await Task.create({ user: req.user._id, title, description, status });
     res
       .status(201)
@@ -21,7 +21,7 @@ const createTask = asyncHandler(async (req, res) => {
 // @access  Private
 const getAllTask = async (req, res) => {
   try {
-    const getTaskData = await Task.find({});
+    const getTaskData = await Task.find({ user: req.user._id });
     res.status(200).json(getTaskData);
   } catch (error) {
     res.status(500).json(error?.message);
